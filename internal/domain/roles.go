@@ -3,22 +3,24 @@ package domain
 import "slices"
 
 type GlobalRole string
+type ProjectRole string
+type ProcessRole string
 
 const (
 	RoleCanCreateProjects GlobalRole = "CanCreateProjects"
 )
 
 const (
-	RoleProjectLeader = "ProjectLeader"
-	RoleProjectMember = "ProjectMember"
+	RoleProjectLeader ProjectRole = "ProjectLeader"
+	RoleProjectMember ProjectRole = "ProjectMember"
 )
 
 const (
-	RoleAdvisor  = "Advisor"
-	RoleStudent  = "Student"
-	RoleReviewer = "Reviewer"
+	RoleAdvisor  ProcessRole = "Advisor"
+	RoleStudent  ProcessRole = "Student"
+	RoleReviewer ProcessRole = "Reviewer"
 )
 
-func hasRole(roles []string, want string) bool {
+func hasProjectRole(roles []ProjectRole, want ProjectRole) bool {
 	return slices.Contains(roles, want)
 }

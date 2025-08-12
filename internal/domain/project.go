@@ -11,10 +11,10 @@ type Project struct {
 type ProjectMember struct {
 	ProjectID ProjectID
 	AccountID AccountID
-	RoleKey   string // could be ProjectLeader or ProjectMember for now
+	RoleKey   ProjectRole
 }
 
-func (p Project) CanManageMembers(actorRoles []string) bool {
+func (p Project) CanManageMembers(actorRoles []ProjectRole) bool {
 
-	return hasRole(actorRoles, RoleProjectLeader)
+	return hasProjectRole(actorRoles, RoleProjectLeader)
 }

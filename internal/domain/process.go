@@ -28,5 +28,5 @@ func (p *Process) Advance(to StageKey) {
 type ProcessMember struct {
 	ProcessID ProcessID
 	AccountID AccountID
-	RoleKey   string
+	RoleKey   ProcessRole
 }

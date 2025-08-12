@@ -13,7 +13,7 @@ const (
 type StageRule struct {
 	Key          StageKey
 	Policy       Policy
-	RequiredRole string
+	RequiredRole ProcessRole
 	ApproveEdge  StageKey
 	RejectEdge   StageKey
 	Threshold    int

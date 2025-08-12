@@ -11,7 +11,7 @@ type Approval struct {
 	ProcessID   ProcessID
 	StageKey    StageKey
 	ByAccountID AccountID
-	ByRole      string
+	ByRole      ProcessRole
 	Decision    Decision
 	Comment     string
 }

@@ -31,7 +31,7 @@ type ProjectMemberAdded struct {
 	ProjectID ProjectID
 	AccountID AccountID
 	AddedBy   AccountID
-	RoleKey   string
+	RoleKey   ProjectRole
 }
 
 func (ProjectMemberAdded) Topic() string {
@@ -55,7 +55,7 @@ type ProcessMemberAdded struct {
 	baseEvent
 	ProcessID ProcessID
 	AccountID AccountID
-	RoleKey   string
+	RoleKey   ProcessRole
 	AddedBy   AccountID
 }
 
@@ -68,7 +68,7 @@ type ApprovalRecorded struct {
 	ProcessID ProcessID
 	StageKey  StageKey
 	ByAccount AccountID
-	ByRole    string
+	ByRole    ProcessRole
 	Decision  Decision
 }
 
