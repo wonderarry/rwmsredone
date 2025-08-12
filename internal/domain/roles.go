@@ -1,7 +1,11 @@
 package domain
 
+import "slices"
+
+type GlobalRole string
+
 const (
-	RoleCanCreateProjects = "CanCreateProjects"
+	RoleCanCreateProjects GlobalRole = "CanCreateProjects"
 )
 
 const (
@@ -16,10 +20,5 @@ const (
 )
 
 func hasRole(roles []string, want string) bool {
-	for _, r := range roles {
-		if r == want {
-			return true
-		}
-	}
-	return false
+	return slices.Contains(roles, want)
 }

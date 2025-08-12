@@ -1,7 +1,6 @@
 package domain
 
 type ProjectID = int64
-type AccountID = int64
 
 type Project struct {
 	ID        ProjectID
