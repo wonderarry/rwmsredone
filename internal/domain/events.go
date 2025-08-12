@@ -97,3 +97,25 @@ type ProcessFinalized struct {
 func (ProcessFinalized) Topic() string {
 	return "ProcessFinalized.v1"
 }
+
+type IdentityLinked struct {
+	baseEvent
+	AccountID AccountID
+	Provider  IdentityProvider
+	Subject   string
+}
+
+func (IdentityLinked) Topic() string {
+	return "IdentityLinked.v1"
+}
+
+type AccountProvisioned struct {
+	baseEvent
+	AccountID AccountID
+	Provider  IdentityProvider
+	Subject   string
+}
+
+func (AccountProvisioned) Topic() string {
+	return "AccountProvisioned.v1"
+}
