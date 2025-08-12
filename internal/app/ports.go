@@ -20,6 +20,8 @@ type Tx interface {
 	Outbox() OutboxRepo
 }
 
+/* ---------- Accounts & Identities ---------- */
+
 type AccountRepo interface {
 	Get(ctx context.Context, id domain.AccountID) (*domain.Account, error)
 	Create(ctx context.Context, a *domain.Account) error
@@ -88,7 +90,6 @@ type PasswordHasher interface {
 }
 
 type OIDCVerifier interface {
-	// Verify an id_token (sig/iss/aud/exp/nonce) and normalize claims we need.
 	VerifyIDToken(ctx context.Context, rawIDToken, expectedNonce string) (OIDCClaims, error)
 }
 
