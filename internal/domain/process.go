@@ -1,6 +1,6 @@
 package domain
 
-type ProcessID = int64
+type ProcessID = string
 type StageKey = string
 type TemplateKey = string
 

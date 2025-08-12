@@ -2,7 +2,8 @@ package domain
 
 import "time"
 
-type AccountID = int64
+type AccountID = string
+type IdentityID = string
 
 type Account struct {
 	ID          AccountID

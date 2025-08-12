@@ -1,11 +1,13 @@
 package domain
 
-type ProjectID = int64
+type ProjectID = string
 
 type Project struct {
-	ID        ProjectID
-	Name      string
-	CreatedBy AccountID
+	ID          ProjectID
+	Name        string
+	Theme       string
+	Description string
+	CreatedBy   AccountID
 }
 
 type ProjectMember struct {

@@ -27,7 +27,8 @@ type AccountRepo interface {
 	Create(ctx context.Context, a *domain.Account) error
 	UpdateProfile(ctx context.Context, a *domain.Account) error
 	AddGlobalRole(ctx context.Context, a *domain.Account) error
-	HasGlobalRole(ctx context.Context, a *domain.Account) error
+	HasGlobalRole(ctx context.Context, id domain.AccountID, role domain.GlobalRole) (bool, error)
+	ListGlobalRoles(ctx context.Context, a *domain.Account) ([]domain.GlobalRole, error)
 }
 
 type IdentityRepo interface {
