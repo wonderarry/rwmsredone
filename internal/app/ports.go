@@ -55,7 +55,10 @@ type ProcessRepo interface {
 	Create(ctx context.Context, pr *domain.Process) error
 	Get(ctx context.Context, id domain.ProcessID) (*domain.Process, error)
 	SetCurrentStage(ctx context.Context, id domain.ProcessID, stage domain.StageKey) error
+
+	// TODO: tie to admin
 	SetState(ctx context.Context, id domain.ProcessID, state domain.ProcessState) error
+
 	AddMember(ctx context.Context, m domain.ProcessMember) error
 	RemoveMember(ctx context.Context, m domain.ProcessMember) error
 	IsMember(ctx context.Context, processID domain.ProcessID, accountID domain.AccountID, role domain.ProcessRole) (bool, error)
