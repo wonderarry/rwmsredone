@@ -1,0 +1,17 @@
+version: "2"
+sql:
+  - engine: postgresql
+    schema: infra/db/migrations
+    queries: infra/db/queries
+    gen:
+      go:
+        package: sqlc
+        out: infra/db/sqlc
+        sql_package: "pgx/v5"
+        emit_json_tags: true
+        emit_db_tags: false
+        emit_interface: false
+        emit_params_struct_pointers: false
+        overrides:
+          - db_type: "pg_catalog.timestamptz"
+            go_type: "time.Time"
