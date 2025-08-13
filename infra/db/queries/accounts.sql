@@ -7,7 +7,7 @@ SELECT id, first_name, middle_name, last_name, grp, created_at, updated_at
 FROM accounts
 WHERE id = $1;
 
--- name: AddGlobalRole :exec
+-- name: GrantGlobalRole :exec
 INSERT INTO account_global_roles (account_id, role_key)
 VALUES ($1, $2)
 ON CONFLICT (account_id, role_key) DO NOTHING;

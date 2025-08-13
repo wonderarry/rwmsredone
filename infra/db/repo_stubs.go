@@ -8,27 +8,27 @@ import (
 	"github.com/wonderarry/rwmsredone/internal/domain"
 )
 
-/* ---------- Accounts ---------- */
+// /* ---------- Accounts ---------- */
 
-type accountRepo struct{ q *sqlc.Queries }
+// type accountRepo struct{ q *sqlc.Queries }
 
-var _ contract.AccountRepo = (*accountRepo)(nil)
+// var _ contract.AccountRepo = (*accountRepo)(nil)
 
-func (r *accountRepo) Get(ctx context.Context, id domain.AccountID) (*domain.Account, error) {
-	return nil, domain.ErrNotImplemented
-}
-func (r *accountRepo) Create(ctx context.Context, a *domain.Account) error {
-	return domain.ErrNotImplemented
-}
-func (r *accountRepo) AddGlobalRole(ctx context.Context, a *domain.Account) error {
-	return domain.ErrNotImplemented
-}
-func (r *accountRepo) HasGlobalRole(ctx context.Context, id domain.AccountID, role domain.GlobalRole) (bool, error) {
-	return false, domain.ErrNotImplemented
-}
-func (r *accountRepo) ListGlobalRoles(ctx context.Context, a *domain.Account) ([]domain.GlobalRole, error) {
-	return nil, domain.ErrNotImplemented
-}
+// func (r *accountRepo) Get(ctx context.Context, id domain.AccountID) (*domain.Account, error) {
+// 	return nil, domain.ErrNotImplemented
+// }
+// func (r *accountRepo) Create(ctx context.Context, a *domain.Account) error {
+// 	return domain.ErrNotImplemented
+// }
+// func (r *accountRepo) GrantGlobalRole(ctx context.Context, id domain.AccountID, role domain.GlobalRole) error {
+// 	return domain.ErrNotImplemented
+// }
+// func (r *accountRepo) HasGlobalRole(ctx context.Context, id domain.AccountID, role domain.GlobalRole) (bool, error) {
+// 	return false, domain.ErrNotImplemented
+// }
+// func (r *accountRepo) ListGlobalRoles(ctx context.Context, a *domain.Account) ([]domain.GlobalRole, error) {
+// 	return nil, domain.ErrNotImplemented
+// }
 
 /* ---------- Identities ---------- */
 

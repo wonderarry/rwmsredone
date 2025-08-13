@@ -11,22 +11,6 @@ import (
 	"github.com/jackc/pgx/v5/pgtype"
 )
 
-const addGlobalRole = `-- name: AddGlobalRole :exec
-INSERT INTO account_global_roles (account_id, role_key)
-VALUES ($1, $2)
-ON CONFLICT (account_id, role_key) DO NOTHING
-`
-
-type AddGlobalRoleParams struct {
-	AccountID string `json:"account_id"`
-	RoleKey   string `json:"role_key"`
-}
-
-func (q *Queries) AddGlobalRole(ctx context.Context, arg AddGlobalRoleParams) error {
-	_, err := q.db.Exec(ctx, addGlobalRole, arg.AccountID, arg.RoleKey)
-	return err
-}
-
 const createAccount = `-- name: CreateAccount :exec
 INSERT INTO accounts (id, first_name, middle_name, last_name, grp)
 VALUES ($1, $2, $3, $4, $5)
@@ -70,6 +54,22 @@ func (q *Queries) GetAccount(ctx context.Context, id string) (Account, error) {
 		&i.UpdatedAt,
 	)
 	return i, err
+}
+
+const grantGlobalRole = `-- name: GrantGlobalRole :exec
+INSERT INTO account_global_roles (account_id, role_key)
+VALUES ($1, $2)
+ON CONFLICT (account_id, role_key) DO NOTHING
+`
+
+type GrantGlobalRoleParams struct {
+	AccountID string `json:"account_id"`
+	RoleKey   string `json:"role_key"`
+}
+
+func (q *Queries) GrantGlobalRole(ctx context.Context, arg GrantGlobalRoleParams) error {
+	_, err := q.db.Exec(ctx, grantGlobalRole, arg.AccountID, arg.RoleKey)
+	return err
 }
 
 const hasGlobalRole = `-- name: HasGlobalRole :one

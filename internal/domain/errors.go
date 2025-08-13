@@ -12,4 +12,6 @@ var (
 	ErrInvalidCredentials = errors.New("invalid credentials")
 
 	ErrUnauthorized = errors.New("unauthorized")
+
+	ErrUnknownRole = errors.New("unknown role")
 )

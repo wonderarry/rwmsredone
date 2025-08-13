@@ -25,7 +25,7 @@ type Tx interface {
 type AccountRepo interface {
 	Get(ctx context.Context, id domain.AccountID) (*domain.Account, error)
 	Create(ctx context.Context, a *domain.Account) error
-	AddGlobalRole(ctx context.Context, a *domain.Account) error
+	GrantGlobalRole(ctx context.Context, id domain.AccountID, role domain.GlobalRole) error
 	HasGlobalRole(ctx context.Context, id domain.AccountID, role domain.GlobalRole) (bool, error)
 	ListGlobalRoles(ctx context.Context, a *domain.Account) ([]domain.GlobalRole, error)
 }
