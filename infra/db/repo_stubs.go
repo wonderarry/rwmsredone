@@ -1,13 +1,5 @@
 package db
 
-import (
-	"context"
-
-	"github.com/wonderarry/rwmsredone/infra/db/sqlc"
-	"github.com/wonderarry/rwmsredone/internal/app/contract"
-	"github.com/wonderarry/rwmsredone/internal/domain"
-)
-
 // /* ---------- Accounts ---------- */
 
 // type accountRepo struct{ q *sqlc.Queries }
@@ -127,12 +119,12 @@ import (
 // 	return nil, domain.ErrNotImplemented
 // }
 
-/* ---------- Outbox ---------- */
+// /* ---------- Outbox ---------- */
 
-type outboxRepo struct{ q *sqlc.Queries }
+// type outboxRepo struct{ q *sqlc.Queries }
 
-var _ contract.OutboxRepo = (*outboxRepo)(nil)
+// var _ contract.OutboxRepo = (*outboxRepo)(nil)
 
-func (r *outboxRepo) Append(ctx context.Context, e domain.Event) error {
-	return domain.ErrNotImplemented
-}
+// func (r *outboxRepo) Append(ctx context.Context, e domain.Event) error {
+// 	return domain.ErrNotImplemented
+// }
