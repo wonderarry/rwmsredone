@@ -30,21 +30,21 @@ import (
 // 	return nil, domain.ErrNotImplemented
 // }
 
-/* ---------- Identities ---------- */
+// /* ---------- Identities ---------- */
 
-type identityRepo struct{ q *sqlc.Queries }
+// type identityRepo struct{ q *sqlc.Queries }
 
-var _ contract.IdentityRepo = (*identityRepo)(nil)
+// var _ contract.IdentityRepo = (*identityRepo)(nil)
 
-func (r *identityRepo) Create(ctx context.Context, i *domain.Identity) error {
-	return domain.ErrNotImplemented
-}
-func (r *identityRepo) GetByProviderSubject(ctx context.Context, p domain.IdentityProvider, sub string) (*domain.Identity, error) {
-	return nil, domain.ErrNotImplemented
-}
-func (r *identityRepo) ListByAccount(ctx context.Context, id domain.AccountID) ([]*domain.Identity, error) {
-	return nil, domain.ErrNotImplemented
-}
+// func (r *identityRepo) Create(ctx context.Context, i *domain.Identity) error {
+// 	return domain.ErrNotImplemented
+// }
+// func (r *identityRepo) GetByProviderSubject(ctx context.Context, p domain.IdentityProvider, sub string) (*domain.Identity, error) {
+// 	return nil, domain.ErrNotImplemented
+// }
+// func (r *identityRepo) ListByAccount(ctx context.Context, id domain.AccountID) ([]*domain.Identity, error) {
+// 	return nil, domain.ErrNotImplemented
+// }
 
 /* ---------- Projects ---------- */
 

@@ -2,7 +2,6 @@ package db
 
 import (
 	"context"
-	"slices"
 
 	"github.com/jackc/pgx/v5/pgtype"
 	"github.com/wonderarry/rwmsredone/infra/db/sqlc"
@@ -72,12 +71,4 @@ func (r *accountRepo) ListGlobalRoles(ctx context.Context, a *domain.Account) ([
 		out = append(out, parsed)
 	}
 	return out, nil
-}
-
-func parseGlobalRole(s string) (domain.GlobalRole, error) {
-	r := domain.GlobalRole(s)
-	if slices.Contains(domain.AllGlobalRoles, r) {
-		return r, nil
-	}
-	return domain.GlobalRole(""), domain.ErrUnknownRole
 }
