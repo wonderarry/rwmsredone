@@ -64,7 +64,7 @@ func (r *accountRepo) ListGlobalRoles(ctx context.Context, a *domain.Account) ([
 	}
 	out := make([]domain.GlobalRole, 0, len(rows))
 	for _, rr := range rows {
-		parsed, notok := parseGlobalRole(rr)
+		parsed, notok := domain.ParseGlobalRole(rr)
 		if notok != nil {
 			return nil, err
 		}

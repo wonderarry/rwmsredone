@@ -39,3 +39,27 @@ var AllProcessRoles = []ProcessRole{
 func hasProjectRole(roles []ProjectRole, want ProjectRole) bool {
 	return slices.Contains(roles, want)
 }
+
+func ParseGlobalRole(s string) (GlobalRole, error) {
+	r := GlobalRole(s)
+	if slices.Contains(AllGlobalRoles, r) {
+		return r, nil
+	}
+	return GlobalRole(""), ErrUnknownRole
+}
+
+func ParseProjectRole(s string) (ProjectRole, error) {
+	r := ProjectRole(s)
+	if slices.Contains(AllProjectRoles, r) {
+		return r, nil
+	}
+	return ProjectRole(""), ErrUnknownRole
+}
+
+func ParseProcessRole(s string) (ProcessRole, error) {
+	r := ProcessRole(s)
+	if slices.Contains(AllProcessRoles, r) {
+		return r, nil
+	}
+	return ProcessRole(""), ErrUnknownRole
+}
