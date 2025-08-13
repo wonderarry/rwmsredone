@@ -67,6 +67,7 @@ type ProcessRepo interface {
 	RemoveMember(ctx context.Context, m domain.ProcessMember) error
 	IsMember(ctx context.Context, processID domain.ProcessID, accountID domain.AccountID, role domain.ProcessRole) (bool, error)
 	ParentProjectID(ctx context.Context, processID domain.ProcessID) (domain.ProjectID, error)
+	ListMembers(ctx context.Context, id domain.ProcessID) ([]domain.ProcessMember, error)
 }
 
 /* ---------- Approvals ---------- */
