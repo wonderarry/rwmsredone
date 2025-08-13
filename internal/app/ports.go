@@ -50,16 +50,19 @@ type ProjectRepo interface {
 	AddMember(ctx context.Context, m domain.ProjectMember) error
 	RemoveMember(ctx context.Context, m domain.ProjectMember) error
 	IsMember(ctx context.Context, projectID domain.ProjectID, accountID domain.AccountID, role domain.ProjectRole) (bool, error)
+	UpdateMeta(ctx context.Context, p *domain.Project) error
+	ListForAccount(ctx context.Context, id domain.AccountID) ([]*domain.Project, error)
+	ListMembers(ctx context.Context, id domain.ProjectID) ([]domain.ProjectMember, error)
 }
 
 type ProcessRepo interface {
 	Create(ctx context.Context, pr *domain.Process) error
 	Get(ctx context.Context, id domain.ProcessID) (*domain.Process, error)
-	SetCurrentStage(ctx context.Context, id domain.ProcessID, stage domain.StageKey) error
 
 	// TODO: tie to admin
-	SetState(ctx context.Context, id domain.ProcessID, state domain.ProcessState) error
+	SetCurrentStage(ctx context.Context, id domain.ProcessID, stage domain.StageKey) error
 
+	SetState(ctx context.Context, id domain.ProcessID, state domain.ProcessState) error
 	AddMember(ctx context.Context, m domain.ProcessMember) error
 	RemoveMember(ctx context.Context, m domain.ProcessMember) error
 	IsMember(ctx context.Context, processID domain.ProcessID, accountID domain.AccountID, role domain.ProcessRole) (bool, error)

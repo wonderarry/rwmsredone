@@ -38,6 +38,18 @@ func (ProjectMemberAdded) Topic() string {
 	return "ProjectMemberAdded.v1"
 }
 
+type ProjectMemberRemoved struct {
+	baseEvent
+	ProjectID ProjectID
+	AccountID AccountID
+	RemovedBy AccountID
+	RoleKey   ProjectRole
+}
+
+func (ProjectMemberRemoved) Topic() string {
+	return "ProjectMemberRemoved.v1"
+}
+
 type ProcessCreated struct {
 	baseEvent
 	ProcessID   ProcessID
@@ -61,6 +73,18 @@ type ProcessMemberAdded struct {
 
 func (ProcessMemberAdded) Topic() string {
 	return "ProcessMemberAdded.v1"
+}
+
+type ProcessMemberRemoved struct {
+	baseEvent
+	ProcessID ProcessID
+	AccountID AccountID
+	RoleKey   ProcessRole
+	RemovedBy AccountID
+}
+
+func (ProcessMemberRemoved) Topic() string {
+	return "ProcessMemberRemoved.v1"
 }
 
 type ApprovalRecorded struct {
