@@ -12,7 +12,9 @@ type service struct {
 	idgen contract.IDGen
 }
 
-func New(uow contract.UnitOfWork) Service { return &service{uow: uow} }
+func New(uow contract.UnitOfWork, idgen contract.IDGen) Service {
+	return &service{uow: uow, idgen: idgen}
+}
 
 func (s *service) CreateProject(ctx context.Context, cmd CreateProject) (domain.ProjectID, error) {
 	var id domain.ProjectID
