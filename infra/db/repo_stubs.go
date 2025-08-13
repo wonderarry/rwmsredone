@@ -46,86 +46,86 @@ import (
 // 	return nil, domain.ErrNotImplemented
 // }
 
-/* ---------- Projects ---------- */
+// /* ---------- Projects ---------- */
 
-type projectRepo struct{ q *sqlc.Queries }
+// type projectRepo struct{ q *sqlc.Queries }
 
-var _ contract.ProjectRepo = (*projectRepo)(nil)
+// var _ contract.ProjectRepo = (*projectRepo)(nil)
 
-func (r *projectRepo) Create(ctx context.Context, p *domain.Project) error {
-	return domain.ErrNotImplemented
-}
-func (r *projectRepo) Get(ctx context.Context, id domain.ProjectID) (*domain.Project, error) {
-	return nil, domain.ErrNotImplemented
-}
-func (r *projectRepo) AddMember(ctx context.Context, m domain.ProjectMember) error {
-	return domain.ErrNotImplemented
-}
-func (r *projectRepo) RemoveMember(ctx context.Context, m domain.ProjectMember) error {
-	return domain.ErrNotImplemented
-}
-func (r *projectRepo) IsMember(ctx context.Context, projectID domain.ProjectID, accountID domain.AccountID, role domain.ProjectRole) (bool, error) {
-	return false, domain.ErrNotImplemented
-}
-func (r *projectRepo) UpdateMeta(ctx context.Context, p *domain.Project) error {
-	return domain.ErrNotImplemented
-}
-func (r *projectRepo) ListForAccount(ctx context.Context, id domain.AccountID) ([]*domain.Project, error) {
-	return nil, domain.ErrNotImplemented
-}
-func (r *projectRepo) ListMembers(ctx context.Context, id domain.ProjectID) ([]domain.ProjectMember, error) {
-	return nil, domain.ErrNotImplemented
-}
+// func (r *projectRepo) Create(ctx context.Context, p *domain.Project) error {
+// 	return domain.ErrNotImplemented
+// }
+// func (r *projectRepo) Get(ctx context.Context, id domain.ProjectID) (*domain.Project, error) {
+// 	return nil, domain.ErrNotImplemented
+// }
+// func (r *projectRepo) AddMember(ctx context.Context, m domain.ProjectMember) error {
+// 	return domain.ErrNotImplemented
+// }
+// func (r *projectRepo) RemoveMember(ctx context.Context, m domain.ProjectMember) error {
+// 	return domain.ErrNotImplemented
+// }
+// func (r *projectRepo) IsMember(ctx context.Context, projectID domain.ProjectID, accountID domain.AccountID, role domain.ProjectRole) (bool, error) {
+// 	return false, domain.ErrNotImplemented
+// }
+// func (r *projectRepo) UpdateMeta(ctx context.Context, p *domain.Project) error {
+// 	return domain.ErrNotImplemented
+// }
+// func (r *projectRepo) ListForAccount(ctx context.Context, id domain.AccountID) ([]*domain.Project, error) {
+// 	return nil, domain.ErrNotImplemented
+// }
+// func (r *projectRepo) ListMembers(ctx context.Context, id domain.ProjectID) ([]domain.ProjectMember, error) {
+// 	return nil, domain.ErrNotImplemented
+// }
 
-/* ---------- Processes ---------- */
+// /* ---------- Processes ---------- */
 
-type processRepo struct{ q *sqlc.Queries }
+// type processRepo struct{ q *sqlc.Queries }
 
-var _ contract.ProcessRepo = (*processRepo)(nil)
+// var _ contract.ProcessRepo = (*processRepo)(nil)
 
-func (r *processRepo) Create(ctx context.Context, pr *domain.Process) error {
-	return domain.ErrNotImplemented
-}
-func (r *processRepo) Get(ctx context.Context, id domain.ProcessID) (*domain.Process, error) {
-	return nil, domain.ErrNotImplemented
-}
-func (r *processRepo) SetCurrentStage(ctx context.Context, id domain.ProcessID, stage domain.StageKey) error {
-	return domain.ErrNotImplemented
-}
-func (r *processRepo) SetState(ctx context.Context, id domain.ProcessID, state domain.ProcessState) error {
-	return domain.ErrNotImplemented
-}
-func (r *processRepo) AddMember(ctx context.Context, m domain.ProcessMember) error {
-	return domain.ErrNotImplemented
-}
-func (r *processRepo) RemoveMember(ctx context.Context, m domain.ProcessMember) error {
-	return domain.ErrNotImplemented
-}
-func (r *processRepo) IsMember(ctx context.Context, processID domain.ProcessID, accountID domain.AccountID, role domain.ProcessRole) (bool, error) {
-	return false, domain.ErrNotImplemented
-}
-func (r *processRepo) ParentProjectID(ctx context.Context, processID domain.ProcessID) (domain.ProjectID, error) {
-	return "", domain.ErrNotImplemented
-}
-func (r *processRepo) ListMembers(ctx context.Context, id domain.ProcessID) ([]domain.ProcessMember, error) {
-	return nil, domain.ErrNotImplemented
-}
+// func (r *processRepo) Create(ctx context.Context, pr *domain.Process) error {
+// 	return domain.ErrNotImplemented
+// }
+// func (r *processRepo) Get(ctx context.Context, id domain.ProcessID) (*domain.Process, error) {
+// 	return nil, domain.ErrNotImplemented
+// }
+// func (r *processRepo) SetCurrentStage(ctx context.Context, id domain.ProcessID, stage domain.StageKey) error {
+// 	return domain.ErrNotImplemented
+// }
+// func (r *processRepo) SetState(ctx context.Context, id domain.ProcessID, state domain.ProcessState) error {
+// 	return domain.ErrNotImplemented
+// }
+// func (r *processRepo) AddMember(ctx context.Context, m domain.ProcessMember) error {
+// 	return domain.ErrNotImplemented
+// }
+// func (r *processRepo) RemoveMember(ctx context.Context, m domain.ProcessMember) error {
+// 	return domain.ErrNotImplemented
+// }
+// func (r *processRepo) IsMember(ctx context.Context, processID domain.ProcessID, accountID domain.AccountID, role domain.ProcessRole) (bool, error) {
+// 	return false, domain.ErrNotImplemented
+// }
+// func (r *processRepo) ParentProjectID(ctx context.Context, processID domain.ProcessID) (domain.ProjectID, error) {
+// 	return "", domain.ErrNotImplemented
+// }
+// func (r *processRepo) ListMembers(ctx context.Context, id domain.ProcessID) ([]domain.ProcessMember, error) {
+// 	return nil, domain.ErrNotImplemented
+// }
 
-/* ---------- Approvals ---------- */
+// /* ---------- Approvals ---------- */
 
-type approvalRepo struct{ q *sqlc.Queries }
+// type approvalRepo struct{ q *sqlc.Queries }
 
-var _ contract.ApprovalRepo = (*approvalRepo)(nil)
+// var _ contract.ApprovalRepo = (*approvalRepo)(nil)
 
-func (r *approvalRepo) Upsert(ctx context.Context, a domain.Approval) error {
-	return domain.ErrNotImplemented
-}
-func (r *approvalRepo) CountByDecisionAndRole(ctx context.Context, processID domain.ProcessID, stage domain.StageKey, role domain.ProcessRole, decision domain.Decision) (int, error) {
-	return 0, domain.ErrNotImplemented
-}
-func (r *approvalRepo) ListForStage(ctx context.Context, processID domain.ProcessID, stage domain.StageKey) ([]domain.Approval, error) {
-	return nil, domain.ErrNotImplemented
-}
+// func (r *approvalRepo) Upsert(ctx context.Context, a domain.Approval) error {
+// 	return domain.ErrNotImplemented
+// }
+// func (r *approvalRepo) CountByDecisionAndRole(ctx context.Context, processID domain.ProcessID, stage domain.StageKey, role domain.ProcessRole, decision domain.Decision) (int, error) {
+// 	return 0, domain.ErrNotImplemented
+// }
+// func (r *approvalRepo) ListForStage(ctx context.Context, processID domain.ProcessID, stage domain.StageKey) ([]domain.Approval, error) {
+// 	return nil, domain.ErrNotImplemented
+// }
 
 /* ---------- Outbox ---------- */
 
