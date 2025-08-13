@@ -3,24 +3,24 @@ package processes
 import (
 	"context"
 
-	"github.com/wonderarry/rwmsredone/internal/app"
+	"github.com/wonderarry/rwmsredone/internal/app/contract"
 	"github.com/wonderarry/rwmsredone/internal/domain"
 )
 
 type service struct {
-	uow       app.UnitOfWork
-	templates app.TemplateProvider
-	idgen     app.IDGen
+	uow       contract.UnitOfWork
+	templates contract.TemplateProvider
+	idgen     contract.IDGen
 }
 
-func New(uow app.UnitOfWork, templates app.TemplateProvider, idgen app.IDGen) Service {
+func New(uow contract.UnitOfWork, templates contract.TemplateProvider, idgen contract.IDGen) Service {
 	return &service{uow: uow, templates: templates, idgen: idgen}
 }
 
 func (s *service) CreateProcess(ctx context.Context, cmd CreateProcess) (domain.ProcessID, error) {
 	var pid domain.ProcessID
 
-	err := s.uow.WithTx(ctx, func(ctx context.Context, tx app.Tx) error {
+	err := s.uow.WithTx(ctx, func(ctx context.Context, tx contract.Tx) error {
 		isLeader, err := tx.Projects().IsMember(ctx, cmd.ProjectID, cmd.ActorID, domain.RoleProjectLeader)
 		if err != nil {
 			return err
@@ -63,7 +63,7 @@ func (s *service) CreateProcess(ctx context.Context, cmd CreateProcess) (domain.
 }
 
 func (s *service) AddMember(ctx context.Context, cmd AddProcessMember) error {
-	return s.uow.WithTx(ctx, func(ctx context.Context, tx app.Tx) error {
+	return s.uow.WithTx(ctx, func(ctx context.Context, tx contract.Tx) error {
 		projectID, err := tx.Processes().ParentProjectID(ctx, cmd.ProcessID)
 		if err != nil {
 			return err
@@ -102,7 +102,7 @@ func (s *service) AddMember(ctx context.Context, cmd AddProcessMember) error {
 }
 
 func (s *service) RemoveMember(ctx context.Context, cmd RemoveProcessMember) error {
-	return s.uow.WithTx(ctx, func(ctx context.Context, tx app.Tx) error {
+	return s.uow.WithTx(ctx, func(ctx context.Context, tx contract.Tx) error {
 		projectID, err := tx.Processes().ParentProjectID(ctx, cmd.ProcessID)
 		if err != nil {
 			return err
@@ -133,7 +133,7 @@ func (s *service) RemoveMember(ctx context.Context, cmd RemoveProcessMember) err
 }
 
 func (s *service) RecordApproval(ctx context.Context, cmd RecordApproval) error {
-	return s.uow.WithTx(ctx, func(ctx context.Context, tx app.Tx) error {
+	return s.uow.WithTx(ctx, func(ctx context.Context, tx contract.Tx) error {
 		pr, err := tx.Processes().Get(ctx, cmd.ProcessID)
 		if err != nil {
 			return err
@@ -213,7 +213,7 @@ func (s *service) RecordApproval(ctx context.Context, cmd RecordApproval) error 
 
 func (s *service) GetProcess(ctx context.Context, id domain.ProcessID) (*ProcessDetail, error) {
 	var out *ProcessDetail
-	err := s.uow.WithTx(ctx, func(ctx context.Context, tx app.Tx) error {
+	err := s.uow.WithTx(ctx, func(ctx context.Context, tx contract.Tx) error {
 		pr, err := tx.Processes().Get(ctx, id)
 		if err != nil {
 			return err
@@ -237,7 +237,7 @@ func (s *service) GetProcessGraph(ctx context.Context, id domain.ProcessID) (*Gr
 
 func (s *service) ListApprovals(ctx context.Context, id domain.ProcessID, stage domain.StageKey) ([]domain.Approval, error) {
 	var out []domain.Approval
-	err := s.uow.WithTx(ctx, func(ctx context.Context, tx app.Tx) error {
+	err := s.uow.WithTx(ctx, func(ctx context.Context, tx contract.Tx) error {
 		apprs, err := tx.Approvals().ListForStage(ctx, id, stage)
 		if err != nil {
 			return err

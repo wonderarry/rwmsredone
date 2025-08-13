@@ -3,21 +3,21 @@ package projects
 import (
 	"context"
 
-	"github.com/wonderarry/rwmsredone/internal/app"
+	"github.com/wonderarry/rwmsredone/internal/app/contract"
 	"github.com/wonderarry/rwmsredone/internal/domain"
 )
 
 type service struct {
-	uow   app.UnitOfWork
-	idgen app.IDGen
+	uow   contract.UnitOfWork
+	idgen contract.IDGen
 }
 
-func New(uow app.UnitOfWork) Service { return &service{uow: uow} }
+func New(uow contract.UnitOfWork) Service { return &service{uow: uow} }
 
 func (s *service) CreateProject(ctx context.Context, cmd CreateProject) (domain.ProjectID, error) {
 	var id domain.ProjectID
 
-	err := s.uow.WithTx(ctx, func(ctx context.Context, tx app.Tx) error {
+	err := s.uow.WithTx(ctx, func(ctx context.Context, tx contract.Tx) error {
 		ok, err := tx.Accounts().HasGlobalRole(ctx, cmd.ActorID, domain.RoleCanCreateProjects)
 		if err != nil {
 			return err
@@ -52,7 +52,7 @@ func (s *service) CreateProject(ctx context.Context, cmd CreateProject) (domain.
 	return id, err
 }
 func (s *service) EditProjectMeta(ctx context.Context, cmd EditProjectMeta) error {
-	return s.uow.WithTx(ctx, func(ctx context.Context, tx app.Tx) error {
+	return s.uow.WithTx(ctx, func(ctx context.Context, tx contract.Tx) error {
 		ok, err := tx.Projects().IsMember(ctx, cmd.ProjectID, cmd.ActorID, domain.RoleProjectLeader)
 		if err != nil {
 			return err
@@ -84,7 +84,7 @@ func (s *service) EditProjectMeta(ctx context.Context, cmd EditProjectMeta) erro
 	})
 }
 func (s *service) AddProjectMember(ctx context.Context, cmd AddProjectMember) error {
-	return s.uow.WithTx(ctx, func(ctx context.Context, tx app.Tx) error {
+	return s.uow.WithTx(ctx, func(ctx context.Context, tx contract.Tx) error {
 		ok, err := tx.Projects().IsMember(ctx, cmd.ProjectID, cmd.ActorID, domain.RoleProjectLeader)
 		if err != nil {
 			return err
@@ -111,7 +111,7 @@ func (s *service) AddProjectMember(ctx context.Context, cmd AddProjectMember) er
 }
 
 func (s *service) RemoveProjectMember(ctx context.Context, cmd RemoveProjectMember) error {
-	return s.uow.WithTx(ctx, func(ctx context.Context, tx app.Tx) error {
+	return s.uow.WithTx(ctx, func(ctx context.Context, tx contract.Tx) error {
 		ok, err := tx.Projects().IsMember(ctx, cmd.ProjectID, cmd.ActorID, domain.RoleProjectLeader)
 		if err != nil {
 			return err
@@ -139,7 +139,7 @@ func (s *service) RemoveProjectMember(ctx context.Context, cmd RemoveProjectMemb
 }
 func (s *service) ListMyProjects(ctx context.Context, actorID domain.AccountID) ([]ProjectCard, error) {
 	var cards []ProjectCard
-	err := s.uow.WithTx(ctx, func(ctx context.Context, tx app.Tx) error {
+	err := s.uow.WithTx(ctx, func(ctx context.Context, tx contract.Tx) error {
 		ps, err := tx.Projects().ListForAccount(ctx, actorID)
 		if err != nil {
 			return err
@@ -159,7 +159,7 @@ func (s *service) ListMyProjects(ctx context.Context, actorID domain.AccountID) 
 }
 func (s *service) GetProject(ctx context.Context, id domain.ProjectID) (*ProjectDetail, error) {
 	var out *ProjectDetail
-	err := s.uow.WithTx(ctx, func(ctx context.Context, tx app.Tx) error {
+	err := s.uow.WithTx(ctx, func(ctx context.Context, tx contract.Tx) error {
 		p, err := tx.Projects().Get(ctx, id)
 		if err != nil {
 			return err
