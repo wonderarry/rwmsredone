@@ -25,7 +25,6 @@ type Tx interface {
 type AccountRepo interface {
 	Get(ctx context.Context, id domain.AccountID) (*domain.Account, error)
 	Create(ctx context.Context, a *domain.Account) error
-	UpdateProfile(ctx context.Context, a *domain.Account) error
 	AddGlobalRole(ctx context.Context, a *domain.Account) error
 	HasGlobalRole(ctx context.Context, id domain.AccountID, role domain.GlobalRole) (bool, error)
 	ListGlobalRoles(ctx context.Context, a *domain.Account) ([]domain.GlobalRole, error)
@@ -33,7 +32,8 @@ type AccountRepo interface {
 
 type IdentityRepo interface {
 	Create(ctx context.Context, i *domain.Identity) error
-	FindByProviderSubject(ctx context.Context, p domain.IdentityProvider, sub string) (*domain.Identity, error)
+	GetByProviderSubject(ctx context.Context, p domain.IdentityProvider, sub string) (*domain.Identity, error)
+	ListByAccount(ctx context.Context, id domain.AccountID) ([]*domain.Identity, error)
 
 	// Unsure about these currently
 
@@ -113,3 +113,8 @@ type OIDCClaims struct {
 
 type Clock interface{ Now() time.Time }
 type IDGen interface{ NewID() string }
+
+type TokenIssuer interface {
+	Issue(ctx context.Context, subject string, claims map[string]interface{}, expiresIn time.Duration) (string, error)
+	ParseAndVerify(ctx context.Context, token string) (map[string]interface{}, error)
+}

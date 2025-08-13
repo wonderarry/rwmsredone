@@ -5,6 +5,8 @@ import "time"
 type AccountID = string
 type IdentityID = string
 
+/* ---------- Account & Roles ---------- */
+
 type Account struct {
 	ID          AccountID
 	FirstName   string
@@ -20,24 +22,31 @@ type AccountRole struct {
 	Role      GlobalRole
 }
 
+/* ---------- Identity (auth) ---------- */
+
 type IdentityProvider string
 
 const (
 	ProviderLocal          IdentityProvider = "local"
-	ProviderUnivercityOIDC IdentityProvider = "university-oidc"
+	ProviderUniversityOIDC IdentityProvider = "university-oidc"
 )
 
+// Identity represents a login method for an Account.
+// One Account can have many Identities (local, OIDC, etc).
+//   - local:    Subject = login (username)
+//   - oidc:     Subject = "sub" claim (or stable unique per issuer)
 type Identity struct {
-	ID        int64
+	ID        IdentityID
 	AccountID AccountID
 	Provider  IdentityProvider
 	Subject   string
-	Email     string
-	CreatedAt time.Time
-}
+	Email     *string // not sure whether we need it for each identity type
 
-type LocalCredentialHash struct {
-	IdentityID   int64
-	PasswordHash string
-	PasswordSalt string
+	PasswordHash *string // nil for non-local identities
+
+	RefreshToken *string
+	ExpiresAt    *time.Time
+
+	CreatedAt time.Time
+	UpdatedAt time.Time
 }

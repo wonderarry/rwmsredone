@@ -25,6 +25,7 @@ type Deps struct {
 	PasswordHasher contract.PasswordHasher
 	OIDCVerifier   contract.OIDCVerifier
 	Clock          contract.Clock
+	TokenIssuer    contract.TokenIssuer
 }
 
 func NewServices(d Deps) (Services, error) {
@@ -41,7 +42,7 @@ func NewServices(d Deps) (Services, error) {
 	}
 
 	return Services{
-		accounts.New(d.UoW),
+		accounts.New(d.UoW, d.PasswordHasher, d.TokenIssuer, d.IDGen),
 		projects.New(d.UoW, d.IDGen),
 		processes.New(d.UoW, d.Templates, d.IDGen),
 		templates.New(d.Templates),

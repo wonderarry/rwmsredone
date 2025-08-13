@@ -7,7 +7,25 @@ import (
 )
 
 type Service interface {
+	RegisterLocal(ctx context.Context, cmd RegisterLocal) (domain.AccountID, error)
+	LoginLocal(ctx context.Context, login, password string) (Token, error)
 	GetMe(ctx context.Context, actorID domain.AccountID) (*Me, error)
+}
+
+/* ---------- DTOs ---------- */
+
+type RegisterLocal struct {
+	Login      string
+	Password   string
+	FirstName  string
+	MiddleName string
+	LastName   string
+	Group      string
+	Roles      []domain.GlobalRole
+}
+
+type Token struct {
+	AccessToken string
 }
 
 type Me struct {
@@ -17,7 +35,7 @@ type Me struct {
 }
 
 type IdentityInfo struct {
-	Provider string
-	Info     string
+	Provider domain.IdentityProvider
+	Subject  string
 	Email    string
 }
