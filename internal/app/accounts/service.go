@@ -67,7 +67,7 @@ func (s *service) RegisterLocal(ctx context.Context, cmd RegisterLocal) (domain.
 
 		// TODO: Later when assigning global roles use this
 		for _, r := range cmd.Roles {
-			_ = r
+			tx.Accounts().GrantGlobalRole(ctx, accID, r)
 		}
 
 		return tx.Outbox().Append(ctx, domain.AccountProvisioned{AccountID: accID, Provider: domain.ProviderLocal, Subject: cmd.Login})

@@ -2,6 +2,7 @@ package processes
 
 import (
 	"context"
+	"log"
 
 	"github.com/wonderarry/rwmsredone/internal/app/contract"
 	"github.com/wonderarry/rwmsredone/internal/domain"
@@ -19,7 +20,7 @@ func New(uow contract.UnitOfWork, templates contract.TemplateProvider, idgen con
 
 func (s *service) CreateProcess(ctx context.Context, cmd CreateProcess) (domain.ProcessID, error) {
 	var pid domain.ProcessID
-
+	log.Print(cmd.ProjectID)
 	err := s.uow.WithTx(ctx, func(ctx context.Context, tx contract.Tx) error {
 		isLeader, err := tx.Projects().IsMember(ctx, cmd.ProjectID, cmd.ActorID, domain.RoleProjectLeader)
 		if err != nil {
