@@ -1,0 +1,14 @@
+basePath: /
+info:
+  contact: {}
+  description: Research Workflow Management System
+  title: RWMS API
+  version: "0.1"
+paths: {}
+securityDefinitions:
+  BearerAuth:
+    description: Use "Bearer <JWT>"
+    in: header
+    name: Authorization
+    type: apiKey
+swagger: "2.0"

@@ -1,0 +1,25 @@
+version: "3.9"
+services:
+  db:
+    image: postgres:16
+    container_name: rwms_db
+    environment:
+      POSTGRES_USER: rwms
+      POSTGRES_PASSWORD: rwms
+      POSTGRES_DB: rwms
+    ports:
+      - "5432:5432"       
+    volumes:
+      - rwms_pgdata:/var/lib/postgresql/data
+      - ./infra/db/migrations:/docker-entrypoint-initdb.d:ro
+
+  app:
+    build: .
+    env_file:
+      - docker.env       
+      - docker.secrets    
+    ports: ["8080:8080"]
+
+
+volumes:
+  rwms_pgdata:
