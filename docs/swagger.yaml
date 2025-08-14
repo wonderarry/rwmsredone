@@ -1,10 +1,551 @@
 basePath: /
+definitions:
+  accountsapi.LoginLocalReq:
+    properties:
+      login:
+        example: jdoe
+        type: string
+      password:
+        example: secret123
+        type: string
+    type: object
+  accountsapi.RegisterLocalReq:
+    properties:
+      first_name:
+        example: John
+        type: string
+      grant_can_create:
+        example: true
+        type: boolean
+      group_number:
+        example: CS-101
+        type: string
+      last_name:
+        example: Doe
+        type: string
+      login:
+        example: jdoe
+        type: string
+      middle_name:
+        example: Q
+        type: string
+      password:
+        example: secret123
+        type: string
+    type: object
+  domain.Account:
+    properties:
+      createdAt:
+        type: string
+      firstName:
+        type: string
+      groupNumber:
+        type: string
+      id:
+        type: string
+      lastName:
+        type: string
+      middleName:
+        type: string
+      updatedAt:
+        type: string
+    type: object
+  processesapi.ApprovalReq:
+    properties:
+      actor_role:
+        example: Supervisor
+        type: string
+      comment:
+        example: Looks good
+        type: string
+      decision:
+        enum:
+        - approve
+        - reject
+        example: approve
+        type: string
+    type: object
+  processesapi.CreateReq:
+    properties:
+      name:
+        example: Thesis Approval – Spring
+        type: string
+      project_id:
+        example: prj_123
+        type: string
+      template_key:
+        example: thesis-review
+        type: string
+    type: object
+  processesapi.MemberReq:
+    properties:
+      account_id:
+        example: acc_456
+        type: string
+      role:
+        example: Reviewer
+        type: string
+    type: object
+  projectsapi.CreateProjectReq:
+    properties:
+      description:
+        example: Exploring X with Y
+        type: string
+      name:
+        example: Thesis Project
+        type: string
+      theme:
+        example: Machine Learning
+        type: string
+    type: object
+  projectsapi.EditProjectReq:
+    properties:
+      description:
+        example: Updated description
+        type: string
+      name:
+        example: Thesis Project v2
+        type: string
+      theme:
+        example: Deep Learning
+        type: string
+    type: object
+  projectsapi.MemberReq:
+    properties:
+      account_id:
+        example: acc_456
+        type: string
+      role:
+        example: Contributor
+        type: string
+    type: object
+  projectsapi.ProjectBrief:
+    properties:
+      description:
+        example: Exploring X with Y
+        type: string
+      id:
+        example: prj_123
+        type: string
+      name:
+        example: Thesis Project
+        type: string
+      theme:
+        example: Machine Learning
+        type: string
+    type: object
 info:
   contact: {}
   description: Research Workflow Management System
   title: RWMS API
   version: "0.1"
-paths: {}
+paths:
+  /api/accounts/me:
+    get:
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/domain.Account'
+        "400":
+          description: Bad Request
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      security:
+      - BearerAuth: []
+      summary: Get current user profile
+      tags:
+      - accounts
+  /api/auth/login-local:
+    post:
+      consumes:
+      - application/json
+      parameters:
+      - description: login payload
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/accountsapi.LoginLocalReq'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: token
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "400":
+          description: Bad Request
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "401":
+          description: Unauthorized
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      summary: Login with local credentials
+      tags:
+      - auth
+  /api/auth/register-local:
+    post:
+      consumes:
+      - application/json
+      description: Create a new account with username/password
+      parameters:
+      - description: registration payload
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/accountsapi.RegisterLocalReq'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: account_id
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "400":
+          description: Bad Request
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      summary: Register a local account
+      tags:
+      - auth
+  /api/processes/:
+    post:
+      consumes:
+      - application/json
+      parameters:
+      - description: process creation payload
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/processesapi.CreateReq'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: process_id
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "400":
+          description: Bad Request
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "403":
+          description: Forbidden
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      security:
+      - BearerAuth: []
+      summary: Create a new process
+      tags:
+      - processes
+  /api/processes/{pid}/approvals:
+    post:
+      consumes:
+      - application/json
+      parameters:
+      - description: Process ID
+        in: path
+        name: pid
+        required: true
+        type: string
+      - description: approval payload
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/processesapi.ApprovalReq'
+      responses:
+        "204":
+          description: No Content
+          schema:
+            type: string
+        "400":
+          description: Bad Request
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "403":
+          description: Forbidden
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      security:
+      - BearerAuth: []
+      summary: Record an approval/decision for a process
+      tags:
+      - processes
+  /api/processes/{pid}/members:
+    delete:
+      consumes:
+      - application/json
+      parameters:
+      - description: Process ID
+        in: path
+        name: pid
+        required: true
+        type: string
+      - description: member payload
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/processesapi.MemberReq'
+      responses:
+        "204":
+          description: No Content
+          schema:
+            type: string
+        "400":
+          description: Bad Request
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "403":
+          description: Forbidden
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      security:
+      - BearerAuth: []
+      summary: Remove a member from the process
+      tags:
+      - processes
+    post:
+      consumes:
+      - application/json
+      parameters:
+      - description: Process ID
+        in: path
+        name: pid
+        required: true
+        type: string
+      - description: member payload
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/processesapi.MemberReq'
+      responses:
+        "204":
+          description: No Content
+          schema:
+            type: string
+        "400":
+          description: Bad Request
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "403":
+          description: Forbidden
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      security:
+      - BearerAuth: []
+      summary: Add a member to the process
+      tags:
+      - processes
+  /api/projects/:
+    get:
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/projectsapi.ProjectBrief'
+            type: array
+        "400":
+          description: Bad Request
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      security:
+      - BearerAuth: []
+      summary: List projects owned/by the current user
+      tags:
+      - projects
+    post:
+      consumes:
+      - application/json
+      parameters:
+      - description: create project payload
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/projectsapi.CreateProjectReq'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: project_id
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "400":
+          description: Bad Request
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "403":
+          description: Forbidden
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      security:
+      - BearerAuth: []
+      summary: Create a project
+      tags:
+      - projects
+  /api/projects/{id}:
+    put:
+      consumes:
+      - application/json
+      parameters:
+      - description: Project ID
+        in: path
+        name: id
+        required: true
+        type: string
+      - description: edit project payload
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/projectsapi.EditProjectReq'
+      responses:
+        "204":
+          description: No Content
+          schema:
+            type: string
+        "400":
+          description: Bad Request
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "403":
+          description: Forbidden
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      security:
+      - BearerAuth: []
+      summary: Edit project metadata
+      tags:
+      - projects
+  /api/projects/{id}/members:
+    delete:
+      consumes:
+      - application/json
+      parameters:
+      - description: Project ID
+        in: path
+        name: id
+        required: true
+        type: string
+      - description: member payload
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/projectsapi.MemberReq'
+      responses:
+        "204":
+          description: No Content
+          schema:
+            type: string
+        "400":
+          description: Bad Request
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "403":
+          description: Forbidden
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      security:
+      - BearerAuth: []
+      summary: Remove a member from the project
+      tags:
+      - projects
+    post:
+      consumes:
+      - application/json
+      parameters:
+      - description: Project ID
+        in: path
+        name: id
+        required: true
+        type: string
+      - description: member payload
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/projectsapi.MemberReq'
+      responses:
+        "204":
+          description: No Content
+          schema:
+            type: string
+        "400":
+          description: Bad Request
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "403":
+          description: Forbidden
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      security:
+      - BearerAuth: []
+      summary: Add a member to the project
+      tags:
+      - projects
 securityDefinitions:
   BearerAuth:
     description: Use "Bearer <JWT>"

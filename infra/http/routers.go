@@ -37,7 +37,7 @@ func (s *Server) Routes() http.Handler {
 
 	// public
 	r.Route("/swagger", func(r chi.Router) {
-		r.Get("/", httpswagger.WrapHandler)
+		r.Get("/*", httpswagger.WrapHandler)
 	})
 
 	r.Route("/api/auth", func(r chi.Router) {
