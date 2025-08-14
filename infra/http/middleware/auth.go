@@ -1,46 +1,40 @@
-package httpapi
+package middleware
 
 import (
-	"context"
+	"fmt"
 	"net/http"
 	"strings"
 
+	"github.com/wonderarry/rwmsredone/infra/http/httputils"
 	"github.com/wonderarry/rwmsredone/internal/app/contract"
 	"github.com/wonderarry/rwmsredone/internal/domain"
 )
-
-type ctxKey string
-
-const actorKey ctxKey = "actorID"
 
 func RequireAuth(tokens contract.TokenIssuer) func(http.Handler) http.Handler {
 	return func(next http.Handler) http.Handler {
 		return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 			raw := r.Header.Get("Authorization")
 			if !strings.HasPrefix(raw, "Bearer ") {
-				http.Error(w, "missing bearer token", http.StatusUnauthorized)
+				httputils.ErrorJSON(w, http.StatusUnauthorized, ErrMissingToken)
 				return
 			}
-			tok := strings.TrimPrefix(raw, "Bearer ")
-			claims, err := tokens.ParseAndVerify(r.Context(), tok)
+			claims, err := tokens.ParseAndVerify(r.Context(), strings.TrimPrefix(raw, "Bearer "))
 			if err != nil {
-				http.Error(w, "invalid token", http.StatusUnauthorized)
+				httputils.ErrorJSON(w, http.StatusUnauthorized, err)
 				return
 			}
 			sub, _ := claims["sub"].(string)
 			if sub == "" {
-				http.Error(w, "invalid subject", http.StatusUnauthorized)
+				httputils.ErrorJSON(w, http.StatusUnauthorized, ErrInvalidSubject)
 				return
 			}
-			ctx := context.WithValue(r.Context(), actorKey, domain.AccountID(sub))
+			ctx := httputils.WithActor(r.Context(), domain.AccountID(sub))
 			next.ServeHTTP(w, r.WithContext(ctx))
 		})
 	}
 }
 
-func actorID(r *http.Request) domain.AccountID {
-	if v := r.Context().Value(actorKey); v != nil {
-		return v.(domain.AccountID)
-	}
-	return ""
-}
+var (
+	ErrMissingToken   = fmt.Errorf("missing bearer token")
+	ErrInvalidSubject = fmt.Errorf("invalid subject")
+)
