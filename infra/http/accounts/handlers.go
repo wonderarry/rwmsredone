@@ -68,7 +68,7 @@ func (h *Handlers) LoginLocal(w http.ResponseWriter, r *http.Request) {
 		httputils.ErrorJSON(w, 401, err)
 		return
 	}
-	httputils.WriteJSON(w, 200, map[string]string{"token": tok})
+	httputils.WriteJSON(w, 200, map[string]string{"token": tok.AccessToken})
 }
 
 func (h *Handlers) GetMe(w http.ResponseWriter, r *http.Request) {
