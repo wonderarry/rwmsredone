@@ -1,0 +1,66 @@
+# Спецификация процесса УИРа осеннего семестра для бакалавров
+project:
+  type: AutumnBachelorUir
+  name:
+    full: "Учебно-исследовательская работа бакалавров осеннего семестра"
+    short: "УИР"
+  artifacts:
+    task:
+      type: Task
+      name: "Задание на УИР"
+      template: UirTask
+    rspz:
+      type: RSPZ
+      name: "Расширенное содержание пояснительной записки"
+      template: UirRspz
+  dates:
+    $start: .
+    task: start + 2w
+    rspz: start + 8w
+  stages:
+    events:
+      start:
+        name: "Начальное событие"
+        date: start
+        type: Start
+      rspzError:
+        name: "Расширенное содержание пояснительной записки содержит ошибки"
+        date: rspz
+        type: Error
+      rspzDone:
+        name: "Расширенное содержание пояснительной записки принято"
+        date: rspz
+        type: Ok
+    operations:
+      task:
+        name: "Создать задание"
+        date: task
+        policy: NoChecks
+        role: Teacher
+        arguments: []
+        results: [task]
+      rspz:
+        name: "Создать расширенное содержание пояснительной записки"
+        date: rspz
+        policy: CheckConfirmations
+        role: Student
+        arguments: [task]
+        results: [task, rspz]
+      rspzValidate:
+        name: "Проверить расширенное содержание пояснительной записки"
+        date: rspz
+        policy: CheckApproves
+        role: Teacher
+        arguments: [rspz]
+        results: [rspz]
+  gates:
+    - from: [start]
+      to: [task]
+    - from: [task, rspzError]
+      to: [rspz]
+      type: XOR
+    - from: [rspz]
+      to: [rspzValidate]
+    - from: [rspzValidate]
+      to: [rspzError, rspzDone]
+      type: XOR
