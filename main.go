@@ -13,7 +13,9 @@ package main
 import (
 	"context"
 	"log"
+	"log/slog"
 	"net/http"
+	"os"
 
 	"github.com/jackc/pgx/v5/pgxpool"
 	_ "github.com/wonderarry/rwmsredone/docs"
@@ -22,6 +24,7 @@ import (
 	dbuow "github.com/wonderarry/rwmsredone/infra/db"
 	"github.com/wonderarry/rwmsredone/infra/db/templates"
 	httpapi "github.com/wonderarry/rwmsredone/infra/http"
+	"github.com/wonderarry/rwmsredone/infra/logging"
 	"github.com/wonderarry/rwmsredone/infra/security"
 	"github.com/wonderarry/rwmsredone/internal/app"
 )
@@ -62,7 +65,15 @@ func main() {
 		IdleTimeout:  cfg.HTTP.IdleTimeout,
 	}
 
-	log.Printf("RWMS listening on %s", cfg.HTTP.Addr)
+	logging.Init(logging.Options{
+		Level:     cfg.LogLevel,                // RWMS_LOG_LEVEL: debug/info/warn/error
+		JSON:      os.Getenv("RWMS_ENV") != "", // JSON in docker/k8s, text locally
+		AddSource: os.Getenv("RWMS_ENV") == "", // file:line in dev
+		Service:   "rwms",
+		Env:       os.Getenv("RWMS_ENV"),
+	})
+
+	slog.Info("starting", "addr", cfg.HTTP.Addr)
 	log.Fatal(server.ListenAndServe())
 }
 

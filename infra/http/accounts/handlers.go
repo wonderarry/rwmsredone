@@ -79,6 +79,7 @@ type LoginLocalReq struct {
 // @Failure      401      {object}  map[string]string
 // @Router       /api/auth/login-local [post]
 func (h *Handlers) LoginLocal(w http.ResponseWriter, r *http.Request) {
+	// slog.Info("osdfoishfois")
 	var req LoginLocalReq
 	if err := httputils.DecodeJSON(r, &req); err != nil {
 		httputils.ErrorJSON(w, 400, err)
