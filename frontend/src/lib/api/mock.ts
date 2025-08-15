@@ -10,6 +10,7 @@ let mockAccount: Account = {
   lastName: 'Chen',
   createdAt: new Date().toISOString() as unknown as Date, // acceptable for mock
   updatedAt: new Date().toISOString() as unknown as Date,
+  globalRoles: ['CanCreateProjects'],
 };
 
 let mockProjects: ProjectBrief[] = [

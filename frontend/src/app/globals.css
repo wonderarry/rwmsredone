@@ -1,0 +1,6 @@
+@import 'tailwindcss';
+
+
+/* optional: nicer focus outline on body background */
+:root { color-scheme: light; }
+html, body { height: 100%; }
