@@ -5,8 +5,16 @@ import { Sidebar } from '@/components/layout/sidebar';
 import { Topbar } from '@/components/layout/topbar';
 import { Button } from '@/components/ui/button';
 import { Modal } from '@/components/ui/modal';
-import { ProcessesList, ProjectDetailsCard } from '@/components/features/projects/projects-panels';
-import { ProcessHeader, ProcessGraphCard, ArtifactsCard, MessagesCard } from '@/components/features/processes/process-panels';
+import {
+  ProcessesList,
+  ProjectDetailsCard,
+} from '@/components/features/projects/projects-panels';
+import {
+  ProcessHeader,
+  ProcessGraphCard,
+  ArtifactsCard,
+  MessagesCard,
+} from '@/components/features/processes/process-panels';
 import { useToast } from '@/hooks/use-toast';
 
 // ----- Mock Data (page-local; replace with stores/API later)
@@ -14,17 +22,30 @@ const mockUser = {
   id: '1',
   name: 'Dr. Sarah Chen',
   email: 'sarah.chen@university.edu',
-  roles: ['ProjectLeader', 'Reviewer'], // demo: contains Reviewer → shows approve/reject buttons
+  roles: ['ProjectLeader', 'Reviewer'],
 };
 
-type Proc = { id: string; name: string; stage: string; state: 'draft' | 'pending' | 'approved' | 'rejected' };
-type Proj = { id: string; name: string; description: string; theme: string; members: number; processes: Proc[] };
+type Proc = {
+  id: string;
+  name: string;
+  stage: string;
+  state: 'draft' | 'pending' | 'approved' | 'rejected';
+};
+type Proj = {
+  id: string;
+  name: string;
+  description: string;
+  theme: string;
+  members: number;
+  processes: Proc[];
+};
 
 const mockProjects: Proj[] = [
   {
     id: '1',
     name: 'Climate Change Impact Study',
-    description: 'Analyzing the effects of climate change on coastal ecosystems',
+    description:
+      'Analyzing the effects of climate change on coastal ecosystems',
     theme: 'Environmental Science',
     members: 8,
     processes: [
@@ -35,18 +56,22 @@ const mockProjects: Proj[] = [
   {
     id: '2',
     name: 'Neural Network Architecture',
-    description: 'Developing new approaches to deep learning optimization',
+    description:
+      'Developing new approaches to deep learning optimization',
     theme: 'Computer Science',
     members: 5,
-    processes: [{ id: '3', name: 'Funding Approval', stage: 'Approved', state: 'approved' }],
+    processes: [
+      { id: '3', name: 'Funding Approval', stage: 'Approved', state: 'approved' },
+    ],
   },
 ];
 
-// ----- Page
 export default function PrototypePage() {
   const toast = useToast();
 
-  const [currentView, setCurrentView] = React.useState<'home' | 'project' | 'process' | 'profile' | 'settings'>('home');
+  const [currentView, setCurrentView] = React.useState<
+    'home' | 'project' | 'process' | 'profile' | 'settings'
+  >('home');
   const [selectedProjectId, setSelectedProjectId] = React.useState<string | null>(null);
   const [selectedProcessId, setSelectedProcessId] = React.useState<string | null>(null);
 
@@ -58,10 +83,14 @@ export default function PrototypePage() {
   const [newProcess, setNewProcess] = React.useState({ name: '', template: '' });
 
   const selectedProject = mockProjects.find((p) => p.id === selectedProjectId) || null;
-  const selectedProcess = selectedProject?.processes.find((p) => p.id === selectedProcessId) || null;
+  const selectedProcess =
+    selectedProject?.processes.find((p) => p.id === selectedProcessId) || null;
 
   const goHome = () => setCurrentView('home');
-  const openProject = (id: string) => { setSelectedProjectId(id); setCurrentView('project'); };
+  const openProject = (id: string) => {
+    setSelectedProjectId(id);
+    setCurrentView('project');
+  };
   const openProcess = (projectId: string, processId: string) => {
     setSelectedProjectId(projectId);
     setSelectedProcessId(processId);
@@ -71,11 +100,10 @@ export default function PrototypePage() {
   // Actions
   const handleCreateProject = () => {
     if (!newProject.name || !newProject.description) return;
-    // optimistic demo only
     toast.success('Project created successfully');
     setShowCreateProject(false);
     setNewProject({ name: '', description: '', theme: '' });
-    openProject('1'); // navigate like the prototype
+    openProject('1'); // demo nav like prototype
   };
 
   const handleStartProcess = () => setShowCreateProcess(true);
@@ -97,18 +125,22 @@ export default function PrototypePage() {
     return (
       <div className="p-8">
         <div className="mx-auto max-w-4xl">
-          <h1 className="mb-2 text-3xl font-bold text-gray-900">Welcome back, Dr. Chen</h1>
-          <p className="mb-8 text-gray-600">Manage your research projects and approval processes</p>
+          <h1 className="mb-2 text-3xl font-bold text-[hsl(var(--fg))]">
+            Welcome back, Dr. Chen
+          </h1>
+          <p className="mb-8 text-[hsl(var(--muted))]">
+            Manage your research projects and approval processes
+          </p>
 
           <div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
-            <div className="rounded-xl border border-gray-200 bg-white p-6 shadow-sm">
-              <h3 className="mb-2 font-semibold text-gray-900">Recent Projects</h3>
+            <div className="radii-lg border border-base bg-[hsl(var(--surface))] p-6 shadow-soft">
+              <h3 className="mb-2 font-semibold text-[hsl(var(--fg))]">Recent Projects</h3>
               <div className="space-y-2">
                 {mockProjects.slice(0, 2).map((project) => (
                   <button
                     key={project.id}
                     onClick={() => openProject(project.id)}
-                    className="block w-full text-left text-sm text-blue-600 hover:text-blue-700"
+                    className="block w-full text-left text-sm text-[hsl(var(--brand-600))] hover:text-[hsl(var(--brand-700))]"
                   >
                     {project.name}
                   </button>
@@ -116,18 +148,23 @@ export default function PrototypePage() {
               </div>
             </div>
 
-            <div className="rounded-xl border border-gray-200 bg-white p-6 shadow-sm">
-              <h3 className="mb-2 font-semibold text-gray-900">Pending Approvals</h3>
+            <div className="radii-lg border border-base bg-[hsl(var(--surface))] p-6 shadow-soft">
+              <h3 className="mb-2 font-semibold text-[hsl(var(--fg))]">Pending Approvals</h3>
               <div className="space-y-2">
-                <div className="text-sm text-gray-600">Ethics Review</div>
-                <div className="text-sm text-gray-600">Data Collection Approval</div>
+                <div className="text-sm text-[hsl(var(--muted))]">Ethics Review</div>
+                <div className="text-sm text-[hsl(var(--muted))]">Data Collection Approval</div>
               </div>
             </div>
 
-            <div className="rounded-xl border border-gray-200 bg-white p-6 shadow-sm">
-              <h3 className="mb-2 font-semibold text-gray-900">Quick Actions</h3>
+            <div className="radii-lg border border-base bg-[hsl(var(--surface))] p-6 shadow-soft">
+              <h3 className="mb-2 font-semibold text-[hsl(var(--fg))]">Quick Actions</h3>
               <div className="space-y-2">
-                <Button variant="ghost" size="sm" className="w-full justify-start" onClick={() => setShowCreateProject(true)}>
+                <Button
+                  variant="ghost"
+                  size="sm"
+                  className="w-full justify-start"
+                  onClick={() => setShowCreateProject(true)}
+                >
                   New Project
                 </Button>
               </div>
@@ -139,28 +176,30 @@ export default function PrototypePage() {
   }
 
   function ProjectView() {
-    if (!selectedProject) return <div className="p-8">Project not found</div>;
+    if (!selectedProject) return <div className="p-8 text-[hsl(var(--fg))]">Project not found</div>;
 
     return (
       <div className="p-8">
         <div className="mx-auto max-w-6xl">
           <div className="mb-6 flex items-center justify-between">
             <div>
-              <h1 className="mb-2 text-3xl font-bold text-gray-900">{selectedProject.name}</h1>
-              <p className="text-gray-600">{selectedProject.description}</p>
+              <h1 className="mb-2 text-3xl font-bold text-[hsl(var(--fg))]">
+                {selectedProject.name}
+              </h1>
+              <p className="text-[hsl(var(--muted))]">{selectedProject.description}</p>
             </div>
             <Button onClick={handleStartProcess}>Start Process</Button>
           </div>
 
           <div className="grid grid-cols-1 gap-6 lg:grid-cols-3">
             <div className="lg:col-span-2">
-              <div className="rounded-xl border border-gray-200 bg-white shadow-sm">
-                <div className="border-b border-gray-200 p-6">
-                  <h2 className="text-xl font-semibold">Processes</h2>
+              <div className="radii-lg border border-base bg-[hsl(var(--surface))] shadow-soft">
+                <div className="border-b border-base p-6">
+                  <h2 className="text-xl font-semibold text-[hsl(var(--fg))]">Processes</h2>
                 </div>
                 <ProcessesList
                   processes={selectedProject.processes}
-                  onOpenProcess={(pid) => openProcess(selectedProject.id, pid)}
+                  onOpenProcess={(pid: string) => openProcess(selectedProject.id, pid)}
                 />
               </div>
             </div>
@@ -178,9 +217,11 @@ export default function PrototypePage() {
   }
 
   function ProcessView() {
-    if (!selectedProject || !selectedProcess) return <div className="p-8">Process not found</div>;
+    if (!selectedProject || !selectedProcess)
+      return <div className="p-8 text-[hsl(var(--fg))]">Process not found</div>;
 
-    const canApprove = selectedProcess.state === 'pending' && mockUser.roles.includes('Reviewer');
+    const canApprove =
+      selectedProcess.state === 'pending' && mockUser.roles.includes('Reviewer');
 
     return (
       <div className="p-8">
@@ -208,7 +249,6 @@ export default function PrototypePage() {
     );
   }
 
-  // Render switch
   const content =
     currentView === 'home' ? (
       <HomeView />
@@ -217,13 +257,13 @@ export default function PrototypePage() {
     ) : currentView === 'process' ? (
       <ProcessView />
     ) : currentView === 'profile' ? (
-      <div className="p-8">Profile (placeholder)</div>
+      <div className="p-8 text-[hsl(var(--fg))]">Profile (placeholder)</div>
     ) : (
-      <div className="p-8">Settings (placeholder)</div>
+      <div className="p-8 text-[hsl(var(--fg))]">Settings (placeholder)</div>
     );
 
   return (
-    <div className="flex h-screen bg-gray-50">
+    <div className="flex h-screen bg-[hsl(var(--bg))]">
       <Sidebar
         projects={mockProjects.map((p) => ({
           id: p.id,
@@ -233,7 +273,7 @@ export default function PrototypePage() {
         currentView={currentView}
         selectedProjectId={selectedProjectId}
         selectedProcessId={selectedProcessId}
-        onGoHome={() => setCurrentView('home')}
+        onGoHome={goHome}
         onSelectProject={openProject}
         onSelectProcess={openProcess}
         onNewProject={() => setShowCreateProject(true)}
@@ -250,32 +290,42 @@ export default function PrototypePage() {
       </div>
 
       {/* Create Project */}
-      <Modal isOpen={showCreateProject} onClose={() => setShowCreateProject(false)} title="Create New Project">
+      <Modal
+        isOpen={showCreateProject}
+        onClose={() => setShowCreateProject(false)}
+        title="Create New Project"
+      >
         <div className="space-y-4">
           <div>
-            <label className="mb-2 block text-sm font-medium text-gray-700">Project Name</label>
+            <label className="mb-2 block text-sm font-medium text-[hsl(var(--fg))]">
+              Project Name
+            </label>
             <input
               type="text"
-              className="w-full rounded-lg border border-gray-300 px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
+              className="w-full radii-md border border-base bg-[hsl(var(--surface))] px-3 py-2 text-[hsl(var(--fg))] focus:outline-none focus:ring-2 focus:ring-[hsl(var(--ring))]"
               value={newProject.name}
               onChange={(e) => setNewProject((s) => ({ ...s, name: e.target.value }))}
             />
           </div>
 
           <div>
-            <label className="mb-2 block text-sm font-medium text-gray-700">Description</label>
+            <label className="mb-2 block text-sm font-medium text-[hsl(var(--fg))]">
+              Description
+            </label>
             <textarea
               rows={3}
-              className="w-full rounded-lg border border-gray-300 px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
+              className="w-full radii-md border border-base bg-[hsl(var(--surface))] px-3 py-2 text-[hsl(var(--fg))] focus:outline-none focus:ring-2 focus:ring-[hsl(var(--ring))]"
               value={newProject.description}
               onChange={(e) => setNewProject((s) => ({ ...s, description: e.target.value }))}
             />
           </div>
 
           <div>
-            <label className="mb-2 block text-sm font-medium text-gray-700">Theme</label>
+            <label className="mb-2 block text-sm font-medium text-[hsl(var(--fg))]">
+              Theme
+            </label>
             <select
-              className="w-full rounded-lg border border-gray-300 px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
+              className="w-full radii-md border border-base bg-[hsl(var(--surface))] px-3 py-2 text-[hsl(var(--fg))] focus:outline-none focus:ring-2 focus:ring-[hsl(var(--ring))]"
               value={newProject.theme}
               onChange={(e) => setNewProject((s) => ({ ...s, theme: e.target.value }))}
             >
@@ -288,28 +338,38 @@ export default function PrototypePage() {
 
           <div className="flex space-x-3 pt-4">
             <Button onClick={handleCreateProject}>Create Project</Button>
-            <Button variant="ghost" onClick={() => setShowCreateProject(false)}>Cancel</Button>
+            <Button variant="ghost" onClick={() => setShowCreateProject(false)}>
+              Cancel
+            </Button>
           </div>
         </div>
       </Modal>
 
       {/* Start Process */}
-      <Modal isOpen={showCreateProcess} onClose={() => setShowCreateProcess(false)} title="Start New Process">
+      <Modal
+        isOpen={showCreateProcess}
+        onClose={() => setShowCreateProcess(false)}
+        title="Start New Process"
+      >
         <div className="space-y-4">
           <div>
-            <label className="mb-2 block text-sm font-medium text-gray-700">Process Name</label>
+            <label className="mb-2 block text-sm font-medium text-[hsl(var(--fg))]">
+              Process Name
+            </label>
             <input
               type="text"
-              className="w-full rounded-lg border border-gray-300 px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
+              className="w-full radii-md border border-base bg-[hsl(var(--surface))] px-3 py-2 text-[hsl(var(--fg))] focus:outline-none focus:ring-2 focus:ring-[hsl(var(--ring))]"
               value={newProcess.name}
               onChange={(e) => setNewProcess((s) => ({ ...s, name: e.target.value }))}
             />
           </div>
 
           <div>
-            <label className="mb-2 block text-sm font-medium text-gray-700">Template</label>
+            <label className="mb-2 block text-sm font-medium text-[hsl(var(--fg))]">
+              Template
+            </label>
             <select
-              className="w-full rounded-lg border border-gray-300 px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
+              className="w-full radii-md border border-base bg-[hsl(var(--surface))] px-3 py-2 text-[hsl(var(--fg))] focus:outline-none focus:ring-2 focus:ring-[hsl(var(--ring))]"
               value={newProcess.template}
               onChange={(e) => setNewProcess((s) => ({ ...s, template: e.target.value }))}
             >
@@ -322,29 +382,43 @@ export default function PrototypePage() {
 
           <div className="flex space-x-3 pt-4">
             <Button onClick={handleCreateProcess}>Start Process</Button>
-            <Button variant="ghost" onClick={() => setShowCreateProcess(false)}>Cancel</Button>
+            <Button variant="ghost" onClick={() => setShowCreateProcess(false)}>
+              Cancel
+            </Button>
           </div>
         </div>
       </Modal>
 
       {/* Approve/Reject */}
-      <Modal isOpen={showApprovalModal} onClose={() => setShowApprovalModal(false)} title="Submit Approval">
+      <Modal
+        isOpen={showApprovalModal}
+        onClose={() => setShowApprovalModal(false)}
+        title="Submit Approval"
+      >
         <div className="space-y-4">
-          <p className="text-gray-600">Are you sure you want to approve this process?</p>
+          <p className="text-[hsl(var(--muted))]">
+            Are you sure you want to approve this process?
+          </p>
 
           <div>
-            <label className="mb-2 block text-sm font-medium text-gray-700">Comments (optional)</label>
+            <label className="mb-2 block text-sm font-medium text-[hsl(var(--fg))]">
+              Comments (optional)
+            </label>
             <textarea
               rows={3}
-              className="w-full rounded-lg border border-gray-300 px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
+              className="w-full radii-md border border-base bg-[hsl(var(--surface))] px-3 py-2 text-[hsl(var(--fg))] focus:outline-none focus:ring-2 focus:ring-[hsl(var(--ring))]"
               placeholder="Add any comments..."
             />
           </div>
 
           <div className="flex space-x-3 pt-4">
             <Button onClick={() => handleApproval(true)}>Approve</Button>
-            <Button variant="destructive" onClick={() => handleApproval(false)}>Reject</Button>
-            <Button variant="ghost" onClick={() => setShowApprovalModal(false)}>Cancel</Button>
+            <Button variant="destructive" onClick={() => handleApproval(false)}>
+              Reject
+            </Button>
+            <Button variant="ghost" onClick={() => setShowApprovalModal(false)}>
+              Cancel
+            </Button>
           </div>
         </div>
       </Modal>

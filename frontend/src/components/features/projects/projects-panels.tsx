@@ -4,6 +4,7 @@ import * as React from 'react';
 import { Users, Plus } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { StatusBadge, type ProcessStateUI } from '@/components/ui/status-badge';
+import { cn } from '@/lib/utils/cn';
 
 export type ProcessItem = { id: string; name: string; stage: string; state: ProcessStateUI };
 
@@ -15,18 +16,21 @@ export function ProcessesList({
   onOpenProcess: (processId: string) => void;
 }) {
   return (
-    <div className="divide-y divide-gray-200">
-      {processes.map((p) => (
+    <div className="divide-y divide-[hsl(var(--border))]">
+      {processes.map((proc) => (
         <button
-          key={p.id}
-          onClick={() => onOpenProcess(p.id)}
-          className="w-full p-6 text-left hover:bg-gray-50 flex items-center justify-between"
+          key={proc.id}
+          onClick={() => onOpenProcess(proc.id)}
+          className={cn(
+            'flex w-full items-center justify-between p-6 text-left',
+            'hover:bg-[hsl(var(--surface-2))]'
+          )}
         >
           <div>
-            <h3 className="font-medium text-gray-900">{p.name}</h3>
-            <p className="text-sm text-gray-500 mt-1">{p.stage}</p>
+            <h3 className="font-medium text-[hsl(var(--fg))]">{proc.name}</h3>
+            <p className="mt-1 text-sm text-[hsl(var(--muted))]">{proc.stage}</p>
           </div>
-          <StatusBadge state={p.state} />
+          <StatusBadge state={proc.state} />
         </button>
       ))}
     </div>
@@ -45,28 +49,30 @@ export function ProjectDetailsCard({
   onStartProcess: () => void;
 }) {
   return (
-    <div className="bg-white rounded-xl border border-gray-200 shadow-sm p-6">
-      <h3 className="font-semibold text-gray-900 mb-4">Project Details</h3>
+    <div className="radii-lg border border-base bg-[hsl(var(--surface))] p-6 shadow-soft">
+      <h3 className="mb-4 font-semibold text-[hsl(var(--fg))]">Project Details</h3>
+
       <dl className="space-y-3">
         <div>
-          <dt className="text-sm font-medium text-gray-500">Theme</dt>
-          <dd className="text-sm text-gray-900">{theme}</dd>
+          <dt className="text-sm font-medium text-[hsl(var(--muted))]">Theme</dt>
+          <dd className="text-sm text-[hsl(var(--fg))]">{theme}</dd>
         </div>
         <div>
-          <dt className="text-sm font-medium text-gray-500">Members</dt>
-          <dd className="text-sm text-gray-900">{members}</dd>
+          <dt className="text-sm font-medium text-[hsl(var(--muted))]">Members</dt>
+          <dd className="text-sm text-[hsl(var(--fg))]">{members}</dd>
         </div>
       </dl>
 
-      <Button variant="secondary" className="w-full mt-4" onClick={onManageMembers}>
-        <Users size={16} className="mr-2" />
-        Manage Members
-      </Button>
-
-      <Button className="w-full mt-2" onClick={onStartProcess}>
-        <Plus size={16} className="mr-2" />
-        Start Process
-      </Button>
+      <div className="mt-4 space-y-2">
+        <Button variant="secondary" className="w-full" onClick={onManageMembers}>
+          <Users size={16} className="mr-2" />
+          Manage Members
+        </Button>
+        <Button className="w-full" onClick={onStartProcess}>
+          <Plus size={16} className="mr-2" />
+          Start Process
+        </Button>
+      </div>
     </div>
   );
 }

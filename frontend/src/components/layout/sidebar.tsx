@@ -1,20 +1,13 @@
 'use client';
 
 import * as React from 'react';
-import { ChevronRight, ChevronDown, Home, Plus } from 'lucide-react';
+import { Disclosure, Transition } from '@headlessui/react';
+import { ChevronRight, Home, Plus } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { cn } from '@/lib/utils/cn';
 
-export type ProcessItem = {
-  id: string;
-  name: string;
-};
-
-export type ProjectItem = {
-  id: string;
-  name: string;
-  processes: ProcessItem[];
-};
+export type ProcessItem = { id: string; name: string };
+export type ProjectItem = { id: string; name: string; processes: ProcessItem[] };
 
 interface SidebarProps {
   projects: ProjectItem[];
@@ -37,15 +30,10 @@ export function Sidebar({
   onSelectProcess,
   onNewProject,
 }: SidebarProps) {
-  const [expanded, setExpanded] = React.useState<Record<string, boolean>>({});
-
-  const toggle = (id: string) =>
-    setExpanded((s) => ({ ...s, [id]: !s[id] }));
-
   return (
-    <aside className="flex h-full w-64 flex-col border-r border-gray-200 bg-gray-50">
-      <div className="border-b border-gray-200 p-4">
-        <h1 className="text-xl font-bold text-gray-900">RWMS</h1>
+    <aside className="flex h-full w-64 flex-col border-r border-base bg-[hsl(var(--surface-2))]">
+      <div className="border-b border-base p-4">
+        <h1 className="text-xl font-bold text-[hsl(var(--fg))]">RWMS</h1>
       </div>
 
       <nav className="flex-1 space-y-6 p-4">
@@ -54,8 +42,8 @@ export function Sidebar({
           className={cn(
             'flex w-full items-center rounded-lg px-3 py-2 text-left text-sm font-medium',
             currentView === 'home'
-              ? 'bg-blue-100 text-blue-700'
-              : 'text-gray-700 hover:bg-gray-100'
+              ? 'bg-[hsl(var(--brand-600)/.12)] text-[hsl(var(--brand-600))]'
+              : 'text-[hsl(var(--fg))] hover:bg-[hsl(var(--surface))]'
           )}
         >
           <Home size={16} className="mr-3" />
@@ -64,7 +52,9 @@ export function Sidebar({
 
         <div>
           <div className="mb-2 flex items-center justify-between">
-            <h3 className="text-xs font-semibold uppercase tracking-wide text-gray-500">Projects</h3>
+            <h3 className="text-xs font-semibold uppercase tracking-wide text-[hsl(var(--muted))]">
+              Projects
+            </h3>
             <Button variant="ghost" size="sm" onClick={onNewProject} aria-label="Create project">
               <Plus size={14} />
             </Button>
@@ -75,56 +65,67 @@ export function Sidebar({
               const isProjectActive = currentView === 'project' && selectedProjectId === p.id;
               const isProcessActive = currentView === 'process' && selectedProjectId === p.id;
               const active = isProjectActive || isProcessActive;
-              const isOpen = !!expanded[p.id];
 
               return (
-                <div key={p.id} className="rounded">
-                  <div className="flex items-center">
-                    <button
-                      onClick={() => toggle(p.id)}
-                      className="rounded p-1 hover:bg-gray-100"
-                      aria-label={isOpen ? 'Collapse project' : 'Expand project'}
-                    >
-                      {isOpen ? <ChevronDown size={14} /> : <ChevronRight size={14} />}
-                    </button>
+                <Disclosure key={p.id} defaultOpen={active}>
+                  {({ open }) => (
+                    <div className="rounded">
+                      <Disclosure.Button
+                        className={cn(
+                          'flex w-full items-center rounded-lg px-2 py-2 text-left text-sm',
+                          open ? '' : '',
+                          active
+                            ? 'bg-[hsl(var(--brand-600)/.12)] text-[hsl(var(--brand-600))]'
+                            : 'text-[hsl(var(--fg))] hover:bg-[hsl(var(--surface))]'
+                        )}
+                        onClick={() => onSelectProject(p.id)}
+                      >
+                        <ChevronRight
+                          size={14}
+                          className={cn('mr-1 transition-transform', open && 'rotate-90')}
+                          aria-hidden
+                        />
+                        <span className="flex-1">{p.name}</span>
+                      </Disclosure.Button>
 
-                    <button
-                      onClick={() => onSelectProject(p.id)}
-                      className={cn(
-                        'flex-1 rounded-lg px-2 py-2 text-left text-sm',
-                        active ? 'bg-blue-100 text-blue-700' : 'text-gray-700 hover:bg-gray-100'
-                      )}
-                    >
-                      {p.name}
-                    </button>
-                  </div>
+                      <Transition
+                        show={open && p.processes.length > 0}
+                        enter="transition duration-150 ease-out"
+                        enterFrom="transform scale-y-95 opacity-0"
+                        enterTo="transform scale-y-100 opacity-100"
+                        leave="transition duration-100 ease-in"
+                        leaveFrom="transform scale-y-100 opacity-100"
+                        leaveTo="transform scale-y-95 opacity-0"
+                      >
+                        <Disclosure.Panel static>
+                          <div className="ml-6 mt-1 space-y-1">
+                            {p.processes.map((proc) => {
+                              const activeProc =
+                                currentView === 'process' &&
+                                selectedProcessId === proc.id &&
+                                selectedProjectId === p.id;
 
-                  {isOpen && p.processes.length > 0 && (
-                    <div className="ml-6 mt-1 space-y-1">
-                      {p.processes.map((proc) => {
-                        const activeProc =
-                          currentView === 'process' &&
-                          selectedProcessId === proc.id &&
-                          selectedProjectId === p.id;
-
-                        return (
-                          <button
-                            key={proc.id}
-                            onClick={() => onSelectProcess(p.id, proc.id)}
-                            className={cn(
-                              'w-full rounded px-2 py-1 text-left text-xs',
-                              activeProc
-                                ? 'bg-blue-100 text-blue-700'
-                                : 'text-gray-600 hover:bg-gray-100'
-                            )}
-                          >
-                            {proc.name}
-                          </button>
-                        );
-                      })}
+                              return (
+                                <button
+                                  key={proc.id}
+                                  onClick={() => onSelectProcess(p.id, proc.id)}
+                                  className={cn(
+                                    'w-full rounded px-2 py-1 text-left text-xs',
+                                    activeProc
+                                      ? 'bg-[hsl(var(--brand-600)/.12)] text-[hsl(var(--brand-600))]'
+                                      : 'text-[hsl(var(--muted))] hover:bg-[hsl(var(--surface))]'
+                                  )}
+                                >
+                                  {proc.name}
+                                </button>
+                              );
+                            })}
+                          </div>
+                        </Disclosure.Panel>
+                      </Transition>
                     </div>
                   )}
-                </div>
+                </Disclosure>
               );
             })}
           </div>

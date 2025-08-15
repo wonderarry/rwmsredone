@@ -1,6 +1,79 @@
 @import 'tailwindcss';
 
+/* LIGHT THEME TOKENS */
+:root {
+  /* brand & focus */
+  --brand-600: 221 83% 53%;
+  --brand-700: 224 76% 48%;
+  --ring:      217 91% 60%;
 
-/* optional: nicer focus outline on body background */
-:root { color-scheme: light; }
-html, body { height: 100%; }
+  /* surfaces & text */
+  --bg:        210 20% 98%;
+  --surface:   0 0% 100%;
+  --surface-2: 220 14% 96%;
+  --border:    220 13% 91%;
+  --fg:        222 47% 11%;
+  --muted:     220 9% 46%;
+
+  /* shadow/elevation */
+  --shadow:    215 25% 15% / 0.06;
+
+  /* semantics: base hues (for alpha in dark) */
+  --info:      226 71% 40%;
+  --success:   163 88% 35%;
+  --warning:   23 82% 45%;
+  --danger:    0 70% 45%;
+
+  /* semantics (light, solid tints) */
+  --info-bg:      214 100% 97%;
+  --info-border:  213 97% 87%;
+  --info-fg:      226 71% 40%;
+
+  --success-bg:   152 81% 96%;
+  --success-border:152 76% 80%;
+  --success-fg:   163 88% 20%;
+
+  --warning-bg:   48 96% 89%;
+  --warning-border:48 96% 85%;
+  --warning-fg:   23 82% 31%;
+
+  --danger-bg:    0 86% 97%;
+  --danger-border:0 96% 89%;
+  --danger-fg:    0 70% 35%;
+
+  /* shape */
+  --radius-sm: 8px;
+  --radius-md: 12px;
+  --radius-lg: 20px;
+}
+
+/* DARK THEME TOKENS (override) */
+:root[data-theme="dark"] {
+  --bg:        215 28% 6%;
+  --surface:   217 19% 10%;
+  --surface-2: 215 14% 14%;
+  --border:    215 14% 14%;
+  --fg:        220 14% 90%;
+  --muted:     218 11% 75%;
+
+  /* brighten focus ring slightly on dark */
+  --ring:      217 91% 70%;
+
+  /* in dark we use alpha tints from base hues */
+  /* (derived bg/fg/border will be expressed via /alpha in components) */
+}
+
+/* semantic helpers (so components are clean) */
+.bg-app      { background-color: hsl(var(--bg)); }
+.bg-surface  { background-color: hsl(var(--surface)); }
+.text-fg     { color: hsl(var(--fg)); }
+.text-muted  { color: hsl(var(--muted)); }
+.border-base { border-color: hsl(var(--border)); }
+.shadow-soft { box-shadow: 0 1px 2px 0 hsl(var(--shadow)), 0 1px 3px 1px hsl(var(--shadow)); }
+
+/* radii utilities */
+.radii-sm { border-radius: var(--radius-sm); }
+.radii-md { border-radius: var(--radius-md); }
+.radii-lg { border-radius: var(--radius-lg); }
+
+
