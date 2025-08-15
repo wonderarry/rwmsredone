@@ -1,4 +1,4 @@
-export function ThemeScript() {
+export default function ThemeScript() {
   // Runs before hydration; sets html[data-theme] and color-scheme.
   const code = `
   (function() {
